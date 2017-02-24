@@ -4,13 +4,15 @@
 #include <GLFW/glfw3.h>
 #include <stdio.h>
 #include <time.h>
+#include <math.h>
+#include <unistd.h>
 
 #include "Shader.h"
 #include "Window.h"
 
 const GLuint WIDTH = 800, HEIGHT = 600;
 
-int particleNum = 1 << 16;
+int particleNum = 1 << 22;
 int particleInfo = 5;
 int curParticle = 0, lastParticle = 0;
 size_t particleSize = sizeof(GLfloat) * particleInfo;
@@ -20,6 +22,7 @@ GLfloat* vertices;
 void keyCallback(GLFWwindow* window, int key, int scancode, int action, int mode);
 void cursorCallback(GLFWwindow* window, double xPos, double yPos);
 void mouseClickCallback(GLFWwindow* window, int button, int action, int mode);
+void addParticle(double xPos, double yPos);
 
 int main() {
 	GLFWwindow* window = Window::Init(WIDTH, HEIGHT, &keyCallback, &mouseClickCallback, &cursorCallback);
@@ -27,7 +30,6 @@ int main() {
 		printf("Something went wrong with window initialization\n");
 		exit(-1);
 	}
-
   Shader shader("v-shader/part.shader","f-shader/blue.shader");
 
   vertices = new GLfloat[particleNum * particleInfo];
@@ -65,22 +67,29 @@ int main() {
 
     shader.Use();
     glBindVertexArray(VAO);
-		
-		glBindBuffer(GL_ARRAY_BUFFER, VBO);
-  	glBufferData(GL_ARRAY_BUFFER, particleSize * particleNum, vertices, GL_STREAM_DRAW);
 
-		// if(lastParticle > curParticle){
-		// 	glBufferSubData(GL_ARRAY_BUFFER, lastParticle, (particleNum - lastParticle) * particleSize, vertices);	
-		// 	lastParticle = 0;
-		// }
-		// glBufferSubData(GL_ARRAY_BUFFER, lastParticle, (curParticle - lastParticle) * particleSize, vertices);
-		// // glBufferSubData(GL_ARRAY_BUFFER, 0, (particleNum) * particleSize, vertices);
-  // 	glBindBuffer(GL_ARRAY_BUFFER, 0);
-  // 	lastParticle = curParticle;
+  	if(lastParticle != curParticle){ //Changes have been made
+			glBindBuffer(GL_ARRAY_BUFFER, VBO);
+	  	glBufferData(GL_ARRAY_BUFFER, particleSize * particleNum, vertices, GL_STREAM_DRAW);
+
+			if(lastParticle > curParticle){
+				glBufferSubData(GL_ARRAY_BUFFER, 
+											lastParticle * particleSize, 
+											(particleNum - lastParticle) * particleSize, 
+											vertices + lastParticle);
+				lastParticle = 0;
+				printf("Loop buffer\n");
+			}
+			glBufferSubData(GL_ARRAY_BUFFER, 
+											lastParticle * particleSize, 
+											(curParticle - lastParticle) * particleSize, 
+											vertices + lastParticle);
+	    lastParticle = curParticle;
+			glBindBuffer(GL_ARRAY_BUFFER, 0);
+    }
 
     glDrawArrays(GL_POINTS, 0, particleNum);
     glBindVertexArray(0);
-
     glfwSwapBuffers(window);
 	}
 	glDeleteVertexArrays(1, &VAO);
@@ -95,19 +104,20 @@ double tCord(double v, double max){
 
 void addParticle(double xPos, double yPos){
 	uint64_t i = particleInfo * curParticle;
+	float dir = (float)(rand() % 360);
+	float speed = ((float) (rand() % 1000)) / 1000.0f;
 	vertices[i] = tCord(xPos, WIDTH);
 	vertices[i + 1] = tCord(HEIGHT - yPos, HEIGHT);
-	vertices[i + 2] = ((float)(rand() % 200)) / 200.0f - 0.5f;
-	vertices[i + 3] = ((float)(rand() % 200)) / 200.0f - 0.5f;
+	vertices[i + 2] = sin(dir) * speed;
+	vertices[i + 3] = cos(dir) * speed;
 	vertices[i + 4] = ((float) clock())/CLOCKS_PER_SEC;
 	curParticle = (curParticle + 1) % particleNum;
 }
 
 void cursorCallback(GLFWwindow* window, double xPos, double yPos)
 {
-	for(int i = 0; i < 30; i++)
+	for(int i = 0; i < 1000; i++)
 		addParticle(xPos, yPos);
-	// printf("F: %d\n", curParticle);
 }
 
 
