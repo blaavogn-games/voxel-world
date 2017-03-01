@@ -7,16 +7,17 @@
 #include <math.h>
 #include <unistd.h>
 
+#include "Timer.h"
 #include "Shader.h"
 #include "Window.h"
 
 const GLuint WIDTH = 800, HEIGHT = 600;
-
-int particleNum = 1 << 22;
+Timer timer;
+int particleNum = 1 << 18;
 int particleInfo = 5;
 int curParticle = 0, lastParticle = 0;
-size_t particleSize = sizeof(GLfloat) * particleInfo;
-
+int particleSize = 20;
+float curTime;
 GLfloat* vertices;
 
 void keyCallback(GLFWwindow* window, int key, int scancode, int action, int mode);
@@ -36,8 +37,8 @@ int main() {
   for(int i = 0; i < particleNum * particleInfo; i++)
   	vertices[i] = -1000.0f;
 
-  GLuint VBO, VAO, scale;
-	scale = glGetUniformLocation(shader.Program, "scale");
+  GLuint VBO, VAO, shaderTime;
+	shaderTime = glGetUniformLocation(shader.Program, "time");
 
   glGenVertexArrays(1, &VAO);
   glGenBuffers(1, &VBO);
@@ -56,37 +57,42 @@ int main() {
 
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
   glBindVertexArray(0);
+
+  shader.Use();
+
 	while (!glfwWindowShouldClose(window))
 	{
     glfwPollEvents();
-		// glClearColor(0.2f,0.1f,0.4f,0.4f);
+		if(timer.IsPaused())
+			continue;
 		glClearColor(0.0f,0.0f,0.0f,0.0f);
 		glClear(GL_COLOR_BUFFER_BIT);
 
-    glUniform1f(scale, ((float) clock())/CLOCKS_PER_SEC);
+		curTime = timer.GetMs();
+    glUniform1f(shaderTime, curTime);
 
-    shader.Use();
     glBindVertexArray(VAO);
+		glBindBuffer(GL_ARRAY_BUFFER, VBO);
+    glBufferData(GL_ARRAY_BUFFER, particleSize * particleNum, vertices, GL_STREAM_DRAW);
+		glBindBuffer(GL_ARRAY_BUFFER, 0);
 
-  	if(lastParticle != curParticle){ //Changes have been made
-			glBindBuffer(GL_ARRAY_BUFFER, VBO);
-	  	glBufferData(GL_ARRAY_BUFFER, particleSize * particleNum, vertices, GL_STREAM_DRAW);
+  	// if(lastParticle != curParticle){ //Changes have been made to the buffer
+			// glBindBuffer(GL_ARRAY_BUFFER, VBO);
 
-			if(lastParticle > curParticle){
-				glBufferSubData(GL_ARRAY_BUFFER, 
-											lastParticle * particleSize, 
-											(particleNum - lastParticle) * particleSize, 
-											vertices + lastParticle);
-				lastParticle = 0;
-				printf("Loop buffer\n");
-			}
-			glBufferSubData(GL_ARRAY_BUFFER, 
-											lastParticle * particleSize, 
-											(curParticle - lastParticle) * particleSize, 
-											vertices + lastParticle);
-	    lastParticle = curParticle;
-			glBindBuffer(GL_ARRAY_BUFFER, 0);
-    }
+			// if(lastParticle > curParticle){
+			// 	glBufferSubData(GL_ARRAY_BUFFER, 
+			// 								lastParticle * particleSize, 
+			// 								(particleNum - lastParticle) * (particleSize), 
+			// 								vertices + lastParticle);
+			// 	lastParticle = 0;
+			// }
+			// glBufferSubData(GL_ARRAY_BUFFER, 
+			// 								lastParticle * particleSize, 
+			// 								(curParticle - lastParticle) * (particleSize), 
+			// 								vertices + lastParticle);
+	  //   lastParticle = curParticle;
+			// glBindBuffer(GL_ARRAY_BUFFER, 0);
+   //  }
 
     glDrawArrays(GL_POINTS, 0, particleNum);
     glBindVertexArray(0);
@@ -105,18 +111,20 @@ double tCord(double v, double max){
 void addParticle(double xPos, double yPos){
 	uint64_t i = particleInfo * curParticle;
 	float dir = (float)(rand() % 360);
-	float speed = ((float) (rand() % 1000)) / 1000.0f;
+	float speed = ((float) (rand() % 500)) / 1000.0f;
 	vertices[i] = tCord(xPos, WIDTH);
 	vertices[i + 1] = tCord(HEIGHT - yPos, HEIGHT);
 	vertices[i + 2] = sin(dir) * speed;
 	vertices[i + 3] = cos(dir) * speed;
-	vertices[i + 4] = ((float) clock())/CLOCKS_PER_SEC;
+	vertices[i + 4] = timer.GetMs();
 	curParticle = (curParticle + 1) % particleNum;
 }
 
 void cursorCallback(GLFWwindow* window, double xPos, double yPos)
-{
-	for(int i = 0; i < 1000; i++)
+{	
+	if(timer.IsPaused())
+		return;
+	for(int i = 0; i < 20; i++)
 		addParticle(xPos, yPos);
 }
 
@@ -133,6 +141,12 @@ void mouseClickCallback(GLFWwindow* window, int button, int action, int mode)
 
 void keyCallback(GLFWwindow* window, int key, int scancode, int action, int mode)
 {
+	if(action == GLFW_PRESS){
+		if(timer.IsPaused())
+			timer.Resume();
+		else
+			timer.Pause();
+	}
   if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
     glfwSetWindowShouldClose(window, GL_TRUE);
 }

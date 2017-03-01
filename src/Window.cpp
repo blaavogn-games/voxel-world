@@ -19,7 +19,7 @@ GLFWwindow* Window::Init(GLuint WIDTH,
   glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
   glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
   glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
-  
+
   GLFWwindow* window = glfwCreateWindow(WIDTH, HEIGHT, "Exercises", NULL, NULL);
   if (!window)
   {
@@ -30,6 +30,8 @@ GLFWwindow* Window::Init(GLuint WIDTH,
   glfwSetKeyCallback(window, keyCallBack);
   glfwSetMouseButtonCallback(window, mouseClickCallback);
   glfwSetCursorPosCallback(window, cursorPosCallback);
+  glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
+
   glewExperimental = GL_TRUE; 
   glewInit();
   glViewport(0, 0, WIDTH, HEIGHT);
