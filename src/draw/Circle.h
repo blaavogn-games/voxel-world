@@ -9,16 +9,15 @@
 class Circle : public Drawable
 {
 	private:
-		Vector2 position;
 		GLfloat* vertices;
 		Shader* shader;
 		GLuint VAO, VBO;
-		int segments;	
+		int segments;
 	public:
 		Circle(float cx, float cy, float rad, int num_segments);
 		~Circle();
 		void Draw(float time);
 		void SetPosition(Vector2 position);
 };
-  
+
 #endif

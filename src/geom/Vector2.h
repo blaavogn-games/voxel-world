@@ -11,12 +11,15 @@ class Vector2
 	public:
 		float x, y;
 		Vector2(float x, float y);
-		float Magnitude();
+		float Magnitude() const;
 		Vector2 Normalized();
-		Vector2 Copy();
+    Vector2 Copy() const;
+		void Scale(float s);
+    bool Contained(const Vector2&, const Vector2&) const;
 		GLfloat* operator>>(GLfloat*);
-		Vector2 operator+(Vector2);
-		Vector2 operator-(Vector2);
+		Vector2 operator+(Vector2) const;
+    Vector2 operator-(Vector2) const;
+		float operator*(Vector2) const; //dot-product
 };
-  
+
 #endif

@@ -8,7 +8,7 @@
 
 #include "Shader.h"
 
-Shader::Shader(const GLchar* vertexPath, const GLchar* fragmentPath)
+Shader::Shader(const GLchar *vertexPath, const GLchar *fragmentPath)
 {
   // 1. Retrieve the vertex/fragment source code from filePath
   std::string vertexCode;
@@ -83,7 +83,7 @@ Shader::Shader(const GLchar* vertexPath, const GLchar* fragmentPath)
   glDeleteShader(fragment);
 }
 
-void Shader::Use() 
-{ 
-  glUseProgram(this->Program); 
+void Shader::Use()
+{
+  glUseProgram(this->Program);
 }

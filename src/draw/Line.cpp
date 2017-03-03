@@ -1,9 +1,8 @@
 #include "Line.h"
 
-Line::Line(Vector2 start, Vector2 end) : position((start.x + end.x) / 2, (start.y + end.y) / 2){
+Line::Line(Vector2 start, Vector2 end) : Drawable((start.x + end.x) / 2, (start.y + end.y) / 2){
 	shader = new Shader("v-shader/circle.v","f-shader/circle.f");
 	end >> (start >> vertices);
-	start.x += 0.3f;
   glGenVertexArrays(1, &VAO);
 	glGenBuffers(1, &VBO);
   glBindVertexArray(VAO);

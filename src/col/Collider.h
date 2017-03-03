@@ -5,10 +5,12 @@
 
 class Collider
 {
-	public:
-		Collider(){};
+  protected:
+    Vector2 position;
+  public:
+    Collider(float x, float y) : position(x,y){};
 		virtual ~Collider(){};
-		virtual void SetPosition(Vector2 pos) = 0;
+    Vector2 GetPosition() const {return position.Copy();};
 };
-  
+
 #endif

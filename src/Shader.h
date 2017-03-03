@@ -8,7 +8,7 @@
 #include <fstream>
 #include <sstream>
 #include <iostream>
- 
+
 
 class Shader
 {
@@ -16,9 +16,9 @@ class Shader
   	// The program ID
 		GLuint Program;
 		// Constructor reads and builds the shader
-		Shader(const GLchar* vertexPath, const GLchar* fragmentPath);
+		Shader(const GLchar *vertexPath, const GLchar *fragmentPath);
 		// Use the program
 		void Use();
 };
-  
+
 #endif

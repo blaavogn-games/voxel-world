@@ -9,12 +9,12 @@
 class ColCircle : public Collider
 {
 	private:
-		Vector2 position;
-		float radius;
-	public:
-		ColCircle(Vector2 position, float radius);
-		~ColCircle();
-		virtual void SetPosition(Vector2 pos);
+    float _radius;
+  public:
+    const float &Radius;
+    ColCircle(const Vector2& position, const float radius);
+    ~ColCircle();
+    virtual void SetPosition(Vector2 pos);
 };
-  
+
 #endif

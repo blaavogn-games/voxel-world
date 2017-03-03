@@ -9,7 +9,6 @@
 class Line : public Drawable
 {
 	private:
-		Vector2 position;
 		GLfloat* vertices = new GLfloat[6];
 		Shader* shader;
 		GLuint VAO, VBO;
@@ -19,5 +18,5 @@ class Line : public Drawable
 		void Draw(float time);
 		void SetPosition(Vector2 position);
 };
-  
+
 #endif
