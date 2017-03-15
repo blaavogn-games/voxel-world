@@ -18,19 +18,18 @@ Collision ColDetector::Collides(const Collider &c1, const Collider &c2)
 
 Collision ColDetector::CircleLine(const ColCircle &circle, const ColLine &line)
 {
-
   Vector2 a = circle.GetPosition();
-  Vector2 b = (line.start - line.end).Normalized();
-  b.Scale(a * b);
+  Vector2 proj = (line.start - line.end).Normalized();
+  proj.Scale(a * proj);
 
-  if(!b.Contained(line.start, line.end)){
+  if(!proj.Contained(line.start, line.end)){
     if((a - line.start).Magnitude() < circle.Radius)
       return Collision(true, line.start.Copy());
     if((a - line.end).Magnitude() < circle.Radius)
       return Collision(true, line.end.Copy());
     return Collision::NoCol;
   }
-  if((a - b).Magnitude() < circle.Radius)
-    return Collision(true, b);
+  if((a - proj).Magnitude() < circle.Radius)
+    return Collision(true, proj);
   return Collision::NoCol;
 };
