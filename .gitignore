@@ -1,4 +1,6 @@
 bin/
+obj/
+.d/
 .tags
 .tags_sorted_by_file
 graphics.sublime-project

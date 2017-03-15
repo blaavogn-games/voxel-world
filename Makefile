@@ -1,7 +1,13 @@
 DEPDIR = .d
-$(shell mkdir -p $(DEPDIR) >/dev/null)
+ODIR = obj
+SDIR = src
 
-DEPFLAGS = -MT $@ -MMD -MP -MF $(DEPDIR)/$*.Td
+DIRS =
+$(shell mkdir -p $(DEPDIR) >/dev/null)
+$(shell find $(SDIR) -type d -exec mkdir -p $(ODIR)/\{\} >/dev/null \;)
+$(shell find $(SDIR) -type d -exec mkdir -p $(DEPDIR)/\{\} >/dev/null \;)
+
+DEPFLAGS = -MT $@ -MD -MP -MF $(DEPDIR)/$*.Td
 
 CC = g++-4.9
 CFLAGS =-std=c++11 -Wall -lGLEW -lglfw3 -lGL -lX11 -lXi -lXrandr -lXxf86vm -lXinerama -lXcursor -lrt -lm -pthread -ldl
@@ -9,17 +15,21 @@ CFLAGS =-std=c++11 -Wall -lGLEW -lglfw3 -lGL -lX11 -lXi -lXrandr -lXxf86vm -lXin
 COMPILE = $(CC) $(DEPFLAGS) $(CFLAGS) -c
 POSTCOMPILE = mv -f $(DEPDIR)/$*.Td $(DEPDIR)/$*.d
 
-ODIR = obj
-
-src = $(wildcard *.c)
-obj = $(src:.c=.o)
-
-_OBJ = $(wildcard **/*.cpp)
+_SRC = $(wildcard $(SDIR)/*.cpp) $(wildcard $(SDIR)/*/*.cpp)
+_OBJ = $(_SRC:.cpp=.o)
 OBJ = $(patsubst %,$(ODIR)/%,$(_OBJ))
 
-$(ODIR)/%.o: %.cpp %.h $(DEPDIR)/%.d
+$(OBJ): $(ODIR)/%.o: %.cpp %.h $(DEPDIR)/%.d
 	$(COMPILE) -o $@ $<
 	$(POSTCOMPILE)
 
-all: exercise_4.cpp $(_OBJ)
-	$(CC) $(CFLAGS) -o bin/$@ exercise_4.cpp $(OBJ)
+all: exercise_4.cpp $(OBJ)
+	$(CC) -o bin/$@ exercise_4.cpp $(OBJ) $(CFLAGS)
+
+$(DEPDIR)/%.d: ;
+.PRECIOUS: $(DEPDIR)/%.d
+
+.PHONY: clean
+clean:
+	rm -rf obj/*
+	rm -rf .d/*
