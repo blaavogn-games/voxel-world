@@ -1,5 +1,6 @@
 bin/
 obj/
+inc/
 .d/
 .tags
 .tags_sorted_by_file
