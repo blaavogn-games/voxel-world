@@ -13,11 +13,11 @@ class Vector3
 		Vector3(float x, float y, float z);
 		// float Magnitude() const;
 		// Vector2 Normalized();
-  //   Vector2 Copy() const;
+    Vector3 Copy() const;
 		// void Scale(float s);
   //   bool Contained(const Vector2&, const Vector2&) const;
 		// GLfloat* operator>>(GLfloat*);
-		// Vector2 operator+(Vector2) const;
+		Vector3 operator+(Vector3) const;
   //   Vector2 operator-(Vector2) const;
 		// float operator*(Vector2) const; //dot-product
 };

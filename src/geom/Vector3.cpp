@@ -20,9 +20,9 @@ Vector3::Vector3(float x, float y, float z){
 // 	y *= s;
 // }
 
-// Vector2 Vector2::Copy() const{
-// 	return Vector2(x, y);
-// }
+Vector3 Vector3::Copy() const{
+	return Vector3(x, y, z);
+}
 
 // bool Vector2::Contained(const Vector2 &v1, const Vector2 &v2) const{
 // 	float minX = v1.x, minY = v1.y, maxX = v2.x, maxY = v2.y;
@@ -43,9 +43,9 @@ Vector3::Vector3(float x, float y, float z){
 // 	return arr + 2;
 // }
 
-// Vector2 Vector2::operator+(Vector2 other) const{
-// 	return Vector2(x + other.x, y + other.y);
-// }
+Vector3 Vector3::operator+(Vector3 other) const{
+	return Vector3(x + other.x, y + other.y, z + other.z);
+}
 
 // Vector2 Vector2::operator-(Vector2 other) const{
 // 	return Vector2(x - other.x, y - other.y);
