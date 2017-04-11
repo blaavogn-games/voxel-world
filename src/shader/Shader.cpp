@@ -81,6 +81,12 @@ Shader::Shader(const GLchar *vertexPath, const GLchar *fragmentPath)
   // Delete the shaders as they're linked into our program now and no longer necessery
   glDeleteShader(vertex);
   glDeleteShader(fragment);
+  transformLocation = glGetUniformLocation(Program, "transform");
+  viewLocation = glGetUniformLocation(Program, "view");
+  projectionLocation = glGetUniformLocation(Program, "projection");
+  // printf("%d\n", transformLocation);
+  // printf("%d\n", viewLocation);
+  // printf("%d\n", projectionLocation);
 }
 
 void Shader::Use()

@@ -1,19 +1,23 @@
 #ifndef DRAWABLE3D_H
 #define DRAWABLE3D_H
 
+
+#define GLM_FORCE_RADIANS
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
+
+#include "Camera.h"
 #include "../geom/Vector3.h"
+#include "../geom/Transform.h"
 
 class Drawable3d
 {
-  protected:
-    Vector3 position;
-	public:
-		Drawable3d(float x, float y, float z) : position(x,y,z){};
+  public:
+	  Transform transform;
+		Drawable3d() {};
 		virtual ~Drawable3d(){};
-		virtual void Draw(float time) = 0;
-    virtual void SetPosition(Vector3 pos) = 0;
-    virtual void Move(Vector3 pos) = 0;
-		Vector3 GetPosition(){return position.Copy();};
+    virtual void Draw(Camera camera, float time) = 0;
 };
 
 #endif

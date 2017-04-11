@@ -24,11 +24,11 @@ $(OBJ): $(ODIR)/%.o: %.cpp %.h $(DEPDIR)/%.d
 	$(COMPILE) -o $@ $<
 	$(POSTCOMPILE)
 
-all: exercise_5.cpp $(OBJ)
-	$(CC) -o bin/$@ exercise_5.cpp $(OBJ) $(CFLAGS)
+all: exercise_6.cpp $(OBJ)
+	$(CC) -o bin/$@ exercise_6.cpp $(OBJ) $(CFLAGS)
 
-debug: exercise_5.cpp $(OBJ)
-	$(CC) -g -o bin/$@ exercise_5.cpp $(OBJ) $(CFLAGS)
+debug: exercise_6.cpp $(OBJ)
+	$(CC) -g -o bin/$@ exercise_6.cpp $(OBJ) $(CFLAGS)
 
 $(DEPDIR)/%.d: ;
 .PRECIOUS: $(DEPDIR)/%.d
@@ -37,3 +37,4 @@ $(DEPDIR)/%.d: ;
 clean:
 	rm -rf obj/*
 	rm -rf .d/*
+	rm -rf bin/*
