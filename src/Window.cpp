@@ -43,9 +43,15 @@ GLFWwindow* Window::Init(GLuint WIDTH,
   glewExperimental = GL_TRUE;
   glewInit();
   glViewport(0, 0, WIDTH, HEIGHT);
+  glEnable(GL_DEPTH_TEST);
+  glDepthFunc(GL_LEQUAL);
 
-  glEnable(GL_POINT_SPRITE);
-  glEnable(GL_VERTEX_PROGRAM_POINT_SIZE);
+  // glEnable(GL_POINT_SPRITE);
+  // glEnable(GL_VERTEX_PROGRAM_POINT_SIZE);
+
+  // glDisable(GL_CULL_FACE);
+  // glCullFace(GL_BACK);
+
   // glEnable(GL_BLEND);
   // glBlendFunc(GL_SRC_ALPHA, GL_ONE);
 

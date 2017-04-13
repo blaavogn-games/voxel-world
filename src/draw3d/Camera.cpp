@@ -1,7 +1,7 @@
 #include "Camera.h"
 
 Camera::Camera() {
-  projection = glm::perspective(11.0f, 1.0f, 0.1f, 100.0f);
+  projection = glm::perspective(45.0f, 1.0f, 1.0f, 120.0f);
 }
 
 Camera::~Camera() {

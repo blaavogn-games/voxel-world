@@ -3,7 +3,6 @@
 
 #include <stdio.h>
 #include "Collider.h"
-#include "../Shader.h"
 
 class ColLine : public Collider
 {

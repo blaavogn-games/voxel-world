@@ -2,6 +2,7 @@
 #define DRAWABLE_H
 
 #include "../geom/Vector2.h"
+#include "../shader/Shader.h"
 
 class Drawable
 {

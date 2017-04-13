@@ -13,7 +13,7 @@
 #include <unistd.h>
 #include <vector>
 #include "src/Timer.h"
-#include "src/Shader.h"
+#include "src/shader/Shader.h"
 #include "src/draw3d/Box.h"
 #include "src/Window.h"
 
@@ -32,36 +32,43 @@ std::vector<Box*> voxels;
 
 int main() {
   GLFWwindow* window = Window::Init(WIDTH, HEIGHT, &keyCallback, &mouseClickCallback, &cursorCallback);
-  if(!window){
+  if (!window){
     printf("Something went wrong with window initialization\n");
     exit(-1);
   }
 
-  for(int x = 0; x < 5; x++){
-    for(int z = 0; z < 2; z++){
+  for (int x = 0; x < 200; x++){
+    for (int z = 0; z < 200; z++){
       Box *box = new Box();
       box->transform.Translate(glm::vec3(x * 2, 0, z * 2));
       voxels.push_back(box);
     }
   }
 
-  camera.Translate(glm::vec3(0,10.0f,0.01f));
-  std::cout<<glm::to_string(camera.position)<<std::endl;
-  camera.LookAt(glm::vec3(0.0f,0.00f,0.00f), glm::vec3(0,1,0));
-  std::cout<<glm::to_string(camera.GetView().GetMat())<<std::endl;
+  camera.Translate(glm::vec3(0,14.0f,-1.0f));
+  camera.LookAt(glm::vec3(0.0f,0.01f,0.01f), glm::vec3(0,1,0));
 
+  float lastTime = timer.GetMs();
   while (!glfwWindowShouldClose(window))
   {
-    camera.Translate(glm::vec3(0.01f,0.0f,0.01f));
-
+    float time = timer.GetMs();
+    float deltaTime = time-lastTime;
     glfwPollEvents();
-    if(timer.IsPaused())
+    if (timer.IsPaused())
       continue;
+
+    camera.Translate(glm::vec3(0.0005f * deltaTime,0.000f,0.00045f * deltaTime));
+    ShaderManager::SetCamera(camera);
+
     glClearColor(0.0f,0.0f,0.0f,0.0f);
-    glClear(GL_COLOR_BUFFER_BIT);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+    //Render
+    printf("FPS: %f\n", 1000.0f/(time-lastTime));
     for(auto &box : voxels){
-      box->Draw(camera, timer.GetMs());
+      box->Draw(time);
     }
+    lastTime = time;
     glfwSwapBuffers(window);
   }
   glfwTerminate();

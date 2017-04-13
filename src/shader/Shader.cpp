@@ -8,7 +8,7 @@
 
 #include "Shader.h"
 
-Shader::Shader(const GLchar *vertexPath, const GLchar *fragmentPath)
+Shader::Shader(const char *vertexPath, const char *fragmentPath)
 {
   // 1. Retrieve the vertex/fragment source code from filePath
   std::string vertexCode;
@@ -38,8 +38,8 @@ Shader::Shader(const GLchar *vertexPath, const GLchar *fragmentPath)
   {
     std::cout << "ERROR::SHADER::FILE_NOT_SUCCESFULLY_READ" << std::endl;
   }
-  const GLchar* vShaderCode = vertexCode.c_str();
-  const GLchar * fShaderCode = fragmentCode.c_str();
+  const GLchar *vShaderCode = vertexCode.c_str();
+  const GLchar *fShaderCode = fragmentCode.c_str();
   // 2. Compile shaders
   GLuint vertex, fragment;
   GLint success;
@@ -81,15 +81,27 @@ Shader::Shader(const GLchar *vertexPath, const GLchar *fragmentPath)
   // Delete the shaders as they're linked into our program now and no longer necessery
   glDeleteShader(vertex);
   glDeleteShader(fragment);
-  transformLocation = glGetUniformLocation(Program, "transform");
-  viewLocation = glGetUniformLocation(Program, "view");
-  projectionLocation = glGetUniformLocation(Program, "projection");
+  transformLocation     = glGetUniformLocation(Program, "transform");
+  viewLocation          = glGetUniformLocation(Program, "view");
+  projectionLocation    = glGetUniformLocation(Program, "projection");
+  // viewPositionLocation = glGetUniformLocation(Program, "viewPosition");
   // printf("%d\n", transformLocation);
   // printf("%d\n", viewLocation);
   // printf("%d\n", projectionLocation);
 }
 
+Shader::~Shader(){
+  printf("%s\n", "Deleting shader");
+}
+
 void Shader::Use()
 {
   glUseProgram(this->Program);
+}
+
+void Shader::UpdateCamera(Camera camera)
+{
+  glUniformMatrix4fv(viewLocation, 1, GL_FALSE, glm::value_ptr(camera.GetView().GetMat()));
+  glUniformMatrix4fv(projectionLocation, 1, GL_FALSE, glm::value_ptr(camera.projection));
+  // glUniformMatrix4fv(viewPositionLocation, 1, GL_FALSE, glm::value_ptr(camera.position));
 }

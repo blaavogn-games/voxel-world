@@ -8,19 +8,19 @@
 #include <fstream>
 #include <sstream>
 #include <iostream>
-
+#include "../draw3d/Camera.h"
 
 class Shader
 {
   private:
-	 GLuint transformLocation, viewLocation, projectionLocation;
   public:
+	 GLuint transformLocation, viewLocation, viewPositionLocation, projectionLocation;
   	GLuint Program;
 		Shader(const GLchar *vertexPath, const GLchar *fragmentPath);
-		void Use();
+		~Shader();
+    void Use();
+    void UpdateCamera(Camera camera);
     GLuint GetTransformLocation(){return transformLocation;};
-    GLuint GetViewLocation(){return viewLocation;};
-    GLuint GetProjectionLocation(){return projectionLocation;};
 };
 
 #endif

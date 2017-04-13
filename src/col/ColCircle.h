@@ -4,7 +4,6 @@
 #include <stdio.h>
 
 #include "Collider.h"
-#include "../Shader.h"
 
 class ColCircle : public Collider
 {

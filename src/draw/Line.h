@@ -4,7 +4,6 @@
 #include <stdio.h>
 
 #include "Drawable.h"
-#include "../Shader.h"
 
 class Line : public Drawable
 {
