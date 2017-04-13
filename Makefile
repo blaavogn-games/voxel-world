@@ -7,11 +7,12 @@ DIRS =
 $(shell mkdir -p $(DEPDIR) >/dev/null)
 $(shell find $(SDIR) -type d -exec mkdir -p $(ODIR)/\{\} >/dev/null \;)
 $(shell find $(SDIR) -type d -exec mkdir -p $(DEPDIR)/\{\} >/dev/null \;)
+$(shell ln -s ../res bin/res)
 
 DEPFLAGS = -MT $@ -MD -MP -MF $(DEPDIR)/$*.Td
 
 CC = g++-4.9
-CFLAGS = -std=c++11 -Wall -lGLEW -lglfw3 -lGL -lX11 -lXi -lXrandr -lXxf86vm -lXinerama -lXcursor -lrt -lm -pthread -ldl
+CFLAGS = -std=c++11 -Wall -lGLEW -lglfw3 -lSOIL -lGL -lX11 -lXi -lXrandr -lXxf86vm -lXinerama -lXcursor -lrt -lm -pthread -ldl
 
 COMPILE = $(CC) $(DEPFLAGS) $(CFLAGS) -c
 POSTCOMPILE = mv -f $(DEPDIR)/$*.Td $(DEPDIR)/$*.d

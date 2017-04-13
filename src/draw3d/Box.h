@@ -2,6 +2,7 @@
 #define BOX_H
 
 #include <stdio.h>
+#include <SOIL.h>
 
 #include "Drawable3d.h"
 
@@ -14,7 +15,7 @@ class Box : public Drawable3d
     static void StaticInit();
   private:
     static const GLfloat *vertices;
-    static GLuint VAO, VBO;
+    static GLuint VAO, VBO, texture;
 };
 
 #endif

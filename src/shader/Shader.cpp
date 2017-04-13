@@ -84,10 +84,10 @@ Shader::Shader(const char *vertexPath, const char *fragmentPath)
   transformLocation     = glGetUniformLocation(Program, "transform");
   viewLocation          = glGetUniformLocation(Program, "view");
   projectionLocation    = glGetUniformLocation(Program, "projection");
-  // viewPositionLocation = glGetUniformLocation(Program, "viewPosition");
+  viewPositionLocation = glGetUniformLocation(Program, "viewPosition");
   // printf("%d\n", transformLocation);
   // printf("%d\n", viewLocation);
-  // printf("%d\n", projectionLocation);
+  printf("%d\n", viewPositionLocation);
 }
 
 Shader::~Shader(){
@@ -103,5 +103,5 @@ void Shader::UpdateCamera(Camera camera)
 {
   glUniformMatrix4fv(viewLocation, 1, GL_FALSE, glm::value_ptr(camera.GetView().GetMat()));
   glUniformMatrix4fv(projectionLocation, 1, GL_FALSE, glm::value_ptr(camera.projection));
-  // glUniformMatrix4fv(viewPositionLocation, 1, GL_FALSE, glm::value_ptr(camera.position));
+  glUniform3f(viewPositionLocation, camera.position.x, camera.position.y, camera.position.z);
 }

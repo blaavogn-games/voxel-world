@@ -37,15 +37,15 @@ int main() {
     exit(-1);
   }
 
-  for (int x = 0; x < 200; x++){
-    for (int z = 0; z < 200; z++){
+  for (int x = 0; x < 10; x++){
+    for (int z = 0; z < 10; z++){
       Box *box = new Box();
       box->transform.Translate(glm::vec3(x * 2, 0, z * 2));
       voxels.push_back(box);
     }
   }
 
-  camera.Translate(glm::vec3(0,14.0f,-1.0f));
+  camera.Translate(glm::vec3(0,2.0f,-.03f));
   camera.LookAt(glm::vec3(0.0f,0.01f,0.01f), glm::vec3(0,1,0));
 
   float lastTime = timer.GetMs();
