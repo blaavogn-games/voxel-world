@@ -1,4 +1,4 @@
-#include "Box.h"
+#include "VoxelRenderer.h"
 static const GLfloat temp_va[] = {
   -0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f, 0.0f, 0.0f,
    0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f, 1.0f, 0.0f,
@@ -43,14 +43,14 @@ static const GLfloat temp_va[] = {
   -0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f, 0.0f, 0.0f,
 };
 
-const GLfloat* Box::vertices = temp_va;
-GLuint Box::VAO = -1;
-GLuint Box::VBO = -1;
-GLuint Box::texture = -1;
-GLuint Box::texture2 = -1;
-GLuint Box::texture3 = -1;
+const GLfloat* VoxelRenderer::vertices = temp_va;
+GLuint VoxelRenderer::VAO = -1;
+GLuint VoxelRenderer::VBO = -1;
+GLuint VoxelRenderer::texture = -1;
+GLuint VoxelRenderer::texture2 = -1;
+GLuint VoxelRenderer::texture3 = -1;
 
-void Box::StaticInit(){
+VoxelRenderer::VoxelRenderer(){
   glGenVertexArrays(1, &VAO);
   glGenBuffers(1, &VBO);
 
@@ -70,23 +70,28 @@ void Box::StaticInit(){
   texture2 = ResourceManager::GetTexture("res/grass2.png");
   texture3 = ResourceManager::GetTexture("res/water.png");
 
-  staticInitialized = true;
+  shader = ShaderManager::GetShader("v-shader/3d.vert","f-shader/circle.frag");
 }
 
-Box::Box() : Drawable3d(){
-  if (!staticInitialized)
-    StaticInit();
-  SetShader("v-shader/3d.vert","f-shader/circle.frag");
-}
-
-Box::~Box(){
+VoxelRenderer::~VoxelRenderer(){
   glDeleteVertexArrays(1, &VAO);
   glDeleteBuffers(1, &VBO);
 }
 
-void Box::Draw(float time, int x, int y, int z){
+void VoxelRenderer::Draw(float time, int x, int y, int z, char type){
   shader->Use();
 
+  switch(type){
+    case 0:
+      glBindTexture(GL_TEXTURE_2D, texture);
+      break;
+    case 1:
+      glBindTexture(GL_TEXTURE_2D, texture);
+      break;
+    case 2:
+      glBindTexture(GL_TEXTURE_2D, texture);
+      break;
+  }
   glActiveTexture(GL_TEXTURE0);
   glBindVertexArray(VAO);
   glUniform3f(shader->GetTransformLocation(), x, y, z);

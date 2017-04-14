@@ -14,12 +14,14 @@
 #include <vector>
 #include "src/Timer.h"
 #include "src/shader/Shader.h"
-#include "src/draw3d/Box.h"
+#include "src/draw3d/VoxelRenderer.h"
 #include "src/Window.h"
+#include "src/world/VoxelByte.h"
 
 const GLuint WIDTH = 600, HEIGHT = 600;
 Timer timer;
 Camera camera;
+VoxelByte voxelByte(0,0,0);
 
 void keyCallback(GLFWwindow* window, int key, int scancode, int action, int mode);
 void cursorCallback(GLFWwindow* window, double xPos, double yPos);
@@ -28,8 +30,6 @@ void DrawCircle(float cx, float cy, float r, int num_segments);
 
 using namespace glm;
 
-std::vector<Box*> voxels;
-
 int main() {
   GLFWwindow* window = Window::Init(WIDTH, HEIGHT, &keyCallback, &mouseClickCallback, &cursorCallback);
   if (!window){
@@ -37,15 +37,9 @@ int main() {
     exit(-1);
   }
 
-  for (int x = 0; x < 10; x++){
-    for (int z = 0; z < 10; z++){
-      Box *box = new Box();
-      box->transform.Translate(glm::vec3(x * 2, 0, z * 2));
-      voxels.push_back(box);
-    }
-  }
+  VoxelRenderer *voxelRenderer = new VoxelRenderer();
 
-  camera.Translate(glm::vec3(0,2.0f,-.03f));
+  camera.Translate(glm::vec3(0,6.0f,-.03f));
   camera.LookAt(glm::vec3(0.0f,0.01f,0.01f), glm::vec3(0,1,0));
 
   float lastTime = timer.GetMs();
@@ -65,9 +59,8 @@ int main() {
 
     //Render
     printf("FPS: %f\n", 1000.0f/(time-lastTime));
-    for(auto &box : voxels){
-      box->Draw(time);
-    }
+    voxelByte.Traverse(0, 0, 0, 4, 0, 4, voxelRenderer);
+
     lastTime = time;
     glfwSwapBuffers(window);
   }

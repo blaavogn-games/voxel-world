@@ -10,6 +10,7 @@
 #include "../geom/Vector3.h"
 #include "../geom/Transform.h"
 #include "../shader/ShaderManager.h"
+#include "../io/ResourceManager.h"
 
 class Drawable3d
 {
@@ -17,13 +18,12 @@ class Drawable3d
     Shader *shader;
     static bool staticInitialized;
   public:
-	  Transform transform;
 		Drawable3d() {};
     virtual ~Drawable3d(){};
     void SetShader(const char *vertexPath, const char *fragmentPath){
       shader = ShaderManager::GetShader(vertexPath, fragmentPath);
     };
-    virtual void Draw(float time) = 0;
+    virtual void Draw(float time, int x, int y, int z) = 0;
 };
 
 #endif

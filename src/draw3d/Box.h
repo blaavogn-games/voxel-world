@@ -2,8 +2,6 @@
 #define BOX_H
 
 #include <stdio.h>
-#include <SOIL.h>
-
 #include "Drawable3d.h"
 
 class Box : public Drawable3d
@@ -11,11 +9,11 @@ class Box : public Drawable3d
   public:
     Box();
     ~Box();
-    virtual void Draw(float time);
+    virtual void Draw(float time, int x, int y, int z);
     static void StaticInit();
   private:
     static const GLfloat *vertices;
-    static GLuint VAO, VBO, texture;
+    static GLuint VAO, VBO, texture, texture2, texture3;
 };
 
 #endif
