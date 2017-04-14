@@ -16,12 +16,12 @@
 #include "src/shader/Shader.h"
 #include "src/draw3d/VoxelRenderer.h"
 #include "src/Window.h"
-#include "src/world/VoxelByte.h"
+#include "src/world/VoxelByteNote.h"
 
 const GLuint WIDTH = 600, HEIGHT = 600;
 Timer timer;
 Camera camera;
-VoxelByte voxelByte(0,0,0);
+VoxelByteNote voxelByteNote(0,0,0);
 
 void keyCallback(GLFWwindow* window, int key, int scancode, int action, int mode);
 void cursorCallback(GLFWwindow* window, double xPos, double yPos);
@@ -39,8 +39,9 @@ int main() {
 
   VoxelRenderer *voxelRenderer = new VoxelRenderer();
 
-  camera.Translate(glm::vec3(0,6.0f,-.03f));
+  camera.Translate(glm::vec3(0.0f,36.0f,0.02f));
   camera.LookAt(glm::vec3(0.0f,0.01f,0.01f), glm::vec3(0,1,0));
+  camera.Translate(glm::vec3(-15,0.000f,-15));
 
   float lastTime = timer.GetMs();
   while (!glfwWindowShouldClose(window))
@@ -51,15 +52,20 @@ int main() {
     if (timer.IsPaused())
       continue;
 
-    camera.Translate(glm::vec3(0.0005f * deltaTime,0.000f,0.00045f * deltaTime));
+
+    camera.Translate(glm::vec3(-0.005f * deltaTime,0.000f,-0.005f * deltaTime));
     ShaderManager::SetCamera(camera);
 
     glClearColor(0.0f,0.0f,0.0f,0.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     //Render
-    printf("FPS: %f\n", 1000.0f/(time-lastTime));
-    voxelByte.Traverse(0, 0, 0, 4, 0, 4, voxelRenderer);
+    // printf("FPS: %f\n", 1000.0f/(time-lastTime));
+    int camX = (int) -camera.position.x;
+    int camZ = (int) -camera.position.z;
+    printf("%d, %d, %f\n", camX, camZ, deltaTime);
+    voxelByteNote.Traverse(std::max(0,camX - 8), 0, std::max(0,camZ - 8), camX + 8, 31, camZ + 8, voxelRenderer);
+    // voxelByteNote.Traverse(0, 0, 0, 31, 31, 31, voxelRenderer);
 
     lastTime = time;
     glfwSwapBuffers(window);

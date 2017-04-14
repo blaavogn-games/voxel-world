@@ -5,6 +5,7 @@
 #include "Drawable3d.h"
 #include "../shader/ShaderManager.h"
 
+//This should possibly be static/singleton
 class VoxelRenderer
 {
   private:

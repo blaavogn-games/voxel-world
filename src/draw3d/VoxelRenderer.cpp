@@ -83,13 +83,13 @@ void VoxelRenderer::Draw(float time, int x, int y, int z, char type){
 
   switch(type){
     case 0:
-      glBindTexture(GL_TEXTURE_2D, texture);
+      return;
       break;
     case 1:
       glBindTexture(GL_TEXTURE_2D, texture);
       break;
     case 2:
-      glBindTexture(GL_TEXTURE_2D, texture);
+      glBindTexture(GL_TEXTURE_2D, texture3);
       break;
   }
   glActiveTexture(GL_TEXTURE0);

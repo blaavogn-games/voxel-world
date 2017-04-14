@@ -8,9 +8,8 @@ Camera::~Camera() {
 }
 
 void Camera::Translate(glm::vec3 movement){
-  glm::vec3 inv = -movement;
-  position += inv;
-  view.Translate(inv);
+  position += movement;
+  view.Translate(movement);
 }
 
 void Camera::LookAt(glm::vec3 target, glm::vec3 up){
