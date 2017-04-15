@@ -39,9 +39,9 @@ int main() {
 
   VoxelRenderer *voxelRenderer = new VoxelRenderer();
 
-  camera.Translate(glm::vec3(0.0f,36.0f,0.02f));
+  camera.Translate(glm::vec3(0.0f,55.0f,0.02f));
   camera.LookAt(glm::vec3(0.0f,0.01f,0.01f), glm::vec3(0,1,0));
-  camera.Translate(glm::vec3(-15,0.000f,-15));
+  camera.Translate(glm::vec3(4.0f,0.000f,4.0f));
 
   float lastTime = timer.GetMs();
   while (!glfwWindowShouldClose(window))
@@ -51,7 +51,6 @@ int main() {
     glfwPollEvents();
     if (timer.IsPaused())
       continue;
-
 
     camera.Translate(glm::vec3(-0.005f * deltaTime,0.000f,-0.005f * deltaTime));
     ShaderManager::SetCamera(camera);
@@ -63,9 +62,8 @@ int main() {
     // printf("FPS: %f\n", 1000.0f/(time-lastTime));
     int camX = (int) -camera.position.x;
     int camZ = (int) -camera.position.z;
-    printf("%d, %d, %f\n", camX, camZ, deltaTime);
-    voxelByteNote.Traverse(std::max(0,camX - 8), 0, std::max(0,camZ - 8), camX + 8, 31, camZ + 8, voxelRenderer);
-    // voxelByteNote.Traverse(0, 0, 0, 31, 31, 31, voxelRenderer);
+    // voxelByteNote.Traverse(7, 0, 0, 44, 31, 1, voxelRenderer);
+    voxelByteNote.Traverse(std::max(0, camX - 10), 0, std::max(0, camZ - 10), camX + 10, 44, camZ + 10, voxelRenderer);
 
     lastTime = time;
     glfwSwapBuffers(window);

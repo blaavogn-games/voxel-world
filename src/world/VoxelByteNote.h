@@ -9,7 +9,6 @@
 class VoxelByteNote : public VoxelByte
 {
   private:
-    int x, y, z;
     int resolution;
     VoxelByte* voxelBytes[32][32][32];
   public:
