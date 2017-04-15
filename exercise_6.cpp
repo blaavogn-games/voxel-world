@@ -39,9 +39,8 @@ int main() {
 
   VoxelRenderer *voxelRenderer = new VoxelRenderer();
 
-  camera.Translate(glm::vec3(0.0f,55.0f,0.02f));
-  camera.LookAt(glm::vec3(0.0f,0.01f,0.01f), glm::vec3(0,1,0));
-  camera.Translate(glm::vec3(4.0f,0.000f,4.0f));
+  camera.Translate(glm::vec3(-15f,34.0f,-15f));
+  camera.LookAt(glm::vec3(17f,0.01f,17f), glm::vec3(0,1,0));
 
   float lastTime = timer.GetMs();
   while (!glfwWindowShouldClose(window))
@@ -63,7 +62,7 @@ int main() {
     int camX = (int) -camera.position.x;
     int camZ = (int) -camera.position.z;
     // voxelByteNote.Traverse(7, 0, 0, 44, 31, 1, voxelRenderer);
-    voxelByteNote.Traverse(std::max(0, camX - 10), 0, std::max(0, camZ - 10), camX + 10, 44, camZ + 10, voxelRenderer);
+    voxelByteNote.Traverse(std::max(0, camX - 10), 0, std::max(0, camZ - 10), camX + 10, 31, camZ + 10, voxelRenderer);
 
     lastTime = time;
     glfwSwapBuffers(window);
