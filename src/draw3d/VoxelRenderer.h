@@ -2,6 +2,7 @@
 #define VOXELRENDERER_H
 
 #include <stdio.h>
+#include <vector>
 #include "Drawable3d.h"
 #include "../shader/ShaderManager.h"
 
@@ -11,7 +12,8 @@ class VoxelRenderer
   private:
     Shader *shader;
     static const GLfloat *vertices;
-    static GLuint VAO, VBO, texture, texture2, texture3;
+    static GLuint VAO, VBO;
+    static std::vector<GLuint> textures;
   public:
     VoxelRenderer();
     ~VoxelRenderer();

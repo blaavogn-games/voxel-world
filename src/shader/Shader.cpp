@@ -84,10 +84,8 @@ Shader::Shader(const char *vertexPath, const char *fragmentPath)
   transformLocation     = glGetUniformLocation(Program, "worldCoord");
   viewLocation          = glGetUniformLocation(Program, "view");
   projectionLocation    = glGetUniformLocation(Program, "projection");
-  viewPositionLocation = glGetUniformLocation(Program, "viewPosition");
-  // printf("%d\n", transformLocation);
-  // printf("%d\n", viewLocation);
-  printf("%d\n", viewPositionLocation);
+  viewPositionLocation  = glGetUniformLocation(Program, "viewPosition");
+  noiseLocation         = glGetUniformLocation(Program, "noise");
 }
 
 Shader::~Shader(){
@@ -101,7 +99,7 @@ void Shader::Use()
 
 void Shader::UpdateCamera(Camera camera)
 {
-  glUniformMatrix4fv(viewLocation, 1, GL_FALSE, glm::value_ptr(camera.GetView().GetMat()));
+  glUniformMatrix4fv(viewLocation, 1, GL_FALSE, glm::value_ptr(camera.GetView()));
   glUniformMatrix4fv(projectionLocation, 1, GL_FALSE, glm::value_ptr(camera.projection));
   glUniform3f(viewPositionLocation, camera.position.x, camera.position.y, camera.position.z);
 }

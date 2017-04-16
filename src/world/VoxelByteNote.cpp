@@ -8,11 +8,9 @@ VoxelByteNote::VoxelByteNote(int x, int y, int z) {
 }
 
 void VoxelByteNote::Traverse(int x1, int y1, int z1, int x2, int y2, int z2, VoxelRenderer *voxelRenderer){
-  printf("Leaf: [%d,%d] \n", x1, x2);
   for(int xi = x1/32; xi*32 <= x2; ++xi){
     for(int yi = 0; yi*32 <= y2; ++yi){
       for(int zi = z1/32; zi*32 <= z2; ++zi){
-        printf("(%d,%d,%d)\n", xi, yi, zi);
         VoxelByte* vb = voxelBytes[xi][yi][zi];
 
         if(vb == nullptr){

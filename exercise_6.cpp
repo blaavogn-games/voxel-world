@@ -18,7 +18,8 @@
 #include "src/Window.h"
 #include "src/world/VoxelByteNote.h"
 
-const GLuint WIDTH = 600, HEIGHT = 600;
+// const GLuint WIDTH = 1366, HEIGHT = 768;
+const GLuint WIDTH = 800, HEIGHT = 800;
 Timer timer;
 Camera camera;
 VoxelByteNote voxelByteNote(0,0,0);
@@ -39,8 +40,9 @@ int main() {
 
   VoxelRenderer *voxelRenderer = new VoxelRenderer();
 
-  camera.Translate(glm::vec3(-15f,34.0f,-15f));
-  camera.LookAt(glm::vec3(17f,0.01f,17f), glm::vec3(0,1,0));
+  camera.Translate(glm::vec3(16.0f,32.0f,16.0f));
+  camera.Translate(glm::vec3(100.0f,0.0f,100.0f));
+  camera.Print();
 
   float lastTime = timer.GetMs();
   while (!glfwWindowShouldClose(window))
@@ -51,18 +53,29 @@ int main() {
     if (timer.IsPaused())
       continue;
 
-    camera.Translate(glm::vec3(-0.005f * deltaTime,0.000f,-0.005f * deltaTime));
     ShaderManager::SetCamera(camera);
 
-    glClearColor(0.0f,0.0f,0.0f,0.0f);
+    glClearColor(0.8f,0.8f,1.0f,1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     //Render
     // printf("FPS: %f\n", 1000.0f/(time-lastTime));
-    int camX = (int) -camera.position.x;
-    int camZ = (int) -camera.position.z;
-    // voxelByteNote.Traverse(7, 0, 0, 44, 31, 1, voxelRenderer);
-    voxelByteNote.Traverse(std::max(0, camX - 10), 0, std::max(0, camZ - 10), camX + 10, 31, camZ + 10, voxelRenderer);
+    int camX = (int) camera.position.x;
+    int camY = (int) camera.position.y;
+    int camZ = (int) camera.position.z;
+    // camera.Print();
+    // float pp = 60.0f;
+    float pp = 60.0f;
+    int minX = std::max(camX - pp * (2.0f-(camera.front.x + 1.0f)) * (2.0f-(camera.front.x + 1.0f)), 0.0f);
+    int maxX = std::max(camX + pp * (camera.front.x + 1.0f), 0.0f);
+    printf("%d, %d\n", minX, maxX);
+    voxelByteNote.Traverse(minX,
+                           0,
+                           std::max(0,(int) (camZ - pp * (2.0f-(camera.front.z + 1.0f)) * (2.0f-(camera.front.z + 1.0f)))),
+                           maxX,
+                           31,
+                           camZ + pp * (camera.front.z + 1.0f),
+                           voxelRenderer);
 
     lastTime = time;
     glfwSwapBuffers(window);
@@ -93,12 +106,31 @@ void mouseClickCallback(GLFWwindow* window, int button, int action, int mode)
 
 void keyCallback(GLFWwindow* window, int key, int scancode, int action, int mode)
 {
-  if(action == GLFW_PRESS){
-    if(timer.IsPaused())
+  if(key == GLFW_KEY_W)
+    camera.Translate(camera.front * 0.1f);
+  if(key == GLFW_KEY_S)
+    camera.Translate(camera.front * -0.1f);
+  if(key == GLFW_KEY_D)
+    camera.Translate(glm::normalize(glm::cross(camera.up,camera.front)) * -0.1f);
+  if(key == GLFW_KEY_A)
+    camera.Translate(glm::normalize(glm::cross(camera.up,camera.front)) * 0.1f);
+  if(key == GLFW_KEY_UP)
+    camera.LookVertical(1);
+  if(key == GLFW_KEY_DOWN)
+    camera.LookVertical(-1);
+  if(key == GLFW_KEY_RIGHT)
+    camera.LookHorizontal(1);
+  if(key == GLFW_KEY_LEFT)
+    camera.LookHorizontal(-1);
+  if(key == GLFW_KEY_Q && action == GLFW_PRESS){
+    if(timer.IsPaused()){
       timer.Resume();
-    else
+    }
+    else{
       timer.Pause();
+    }
   }
+
   if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
     glfwSetWindowShouldClose(window, GL_TRUE);
 }

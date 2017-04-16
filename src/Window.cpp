@@ -26,6 +26,7 @@ GLFWwindow* Window::Init(GLuint WIDTH,
   glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
 
   glfwSetErrorCallback(error);
+  // GLFWwindow* window = glfwCreateWindow(WIDTH, HEIGHT, "Exercises", glfwGetPrimaryMonitor(), NULL);
   GLFWwindow* window = glfwCreateWindow(WIDTH, HEIGHT, "Exercises", NULL, NULL);
 
   if (!window)
@@ -34,6 +35,7 @@ GLFWwindow* Window::Init(GLuint WIDTH,
     glfwTerminate();
     return NULL;
   }
+
   glfwMakeContextCurrent(window);
   glfwSetKeyCallback(window, keyCallBack);
   glfwSetMouseButtonCallback(window, mouseClickCallback);
@@ -44,13 +46,12 @@ GLFWwindow* Window::Init(GLuint WIDTH,
   glewInit();
   glViewport(0, 0, WIDTH, HEIGHT);
   glEnable(GL_DEPTH_TEST);
-  glDepthFunc(GL_LEQUAL);
 
   // glEnable(GL_POINT_SPRITE);
   // glEnable(GL_VERTEX_PROGRAM_POINT_SIZE);
 
-  // glDisable(GL_CULL_FACE);
-  // glCullFace(GL_BACK);
+  glEnable(GL_CULL_FACE);
+  glCullFace(GL_BACK);
 
   // glEnable(GL_BLEND);
   // glBlendFunc(GL_SRC_ALPHA, GL_ONE);
