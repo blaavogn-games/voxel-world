@@ -19,10 +19,11 @@ VoxelByteLeaf::VoxelByteLeaf(int inX, int inY, int inZ) : VoxelByte(), x(inX), y
   }
 }
 
-void VoxelByteLeaf::Traverse(int x1, int y1, int z1, int x2, int y2, int z2, VoxelRenderer *voxelRenderer){
-  for (int xi = x1; xi < x2; xi++)
-    for (int yi = y1; yi < y2; yi++)
-      for (int zi = z1; zi < z2; zi++)
-        if (yi + 1 >= y2 || voxels[xi - x][yi - y + 1][zi - z] == 0)
-          voxelRenderer->Draw(0.0f, xi, yi, zi, voxels[xi - x][yi - y][zi - z]);
+void VoxelByteLeaf::Traverse(Camera camera){
+  for (int xi = 0; xi < 32; xi++)
+    for (int yi = 0; yi < 32; yi++)
+      for (int zi = 0; zi < 32; zi++)
+        if(yi < 31 && voxels[xi][yi + 1][zi] == 0)
+        VoxelRenderer::Draw(0.0f, xi + x, yi + y, zi + z, voxels[xi][yi][zi]);
+
 }

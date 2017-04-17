@@ -10,14 +10,15 @@
 class VoxelRenderer
 {
   private:
-    Shader *shader;
+    static Shader *shader;
     static const GLfloat *vertices;
     static GLuint VAO, VBO;
     static std::vector<GLuint> textures;
   public:
+    static int c;
     VoxelRenderer();
     ~VoxelRenderer();
-    virtual void Draw(float time, int x, int y, int z, char type);
+    static void Draw(float time, int x, int y, int z, char type);
     static void StaticInit();
 };
 

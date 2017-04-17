@@ -3,13 +3,14 @@
 
 #include <stdio.h>
 #include "../draw3d/VoxelRenderer.h"
+#include "../draw3d/Camera.h"
 
 class VoxelByte
 {
   protected:
     int x, y, z;
   public:
-    virtual void Traverse(int x1, int y1, int z1, int x2, int y2, int z2, VoxelRenderer *voxelRenderer) = 0;
+    virtual void Traverse(Camera camera) = 0;
 };
 
 #endif

@@ -38,10 +38,10 @@ int main() {
     exit(-1);
   }
 
-  VoxelRenderer *voxelRenderer = new VoxelRenderer();
+  VoxelRenderer::StaticInit();
 
-  camera.Translate(glm::vec3(16.0f,32.0f,16.0f));
-  camera.Translate(glm::vec3(100.0f,0.0f,100.0f));
+  camera.Translate(glm::vec3(-16.0f,10.0f,-16.0f));
+  camera.LookHorizontal(45);
   camera.Print();
 
   float lastTime = timer.GetMs();
@@ -53,30 +53,17 @@ int main() {
     if (timer.IsPaused())
       continue;
 
-    ShaderManager::SetCamera(camera);
+    ShaderManager::SetCamera(&camera);
 
     glClearColor(0.8f,0.8f,1.0f,1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     //Render
-    // printf("FPS: %f\n", 1000.0f/(time-lastTime));
-    int camX = (int) camera.position.x;
-    int camY = (int) camera.position.y;
-    int camZ = (int) camera.position.z;
-    // camera.Print();
-    // float pp = 60.0f;
-    float pp = 60.0f;
-    int minX = std::max(camX - pp * (2.0f-(camera.front.x + 1.0f)) * (2.0f-(camera.front.x + 1.0f)), 0.0f);
-    int maxX = std::max(camX + pp * (camera.front.x + 1.0f), 0.0f);
-    printf("%d, %d\n", minX, maxX);
-    voxelByteNote.Traverse(minX,
-                           0,
-                           std::max(0,(int) (camZ - pp * (2.0f-(camera.front.z + 1.0f)) * (2.0f-(camera.front.z + 1.0f)))),
-                           maxX,
-                           31,
-                           camZ + pp * (camera.front.z + 1.0f),
-                           voxelRenderer);
+    printf("FPS: %f, voxels: %d\n", 1000.0f/(time-lastTime), VoxelRenderer::c);
+    VoxelRenderer::c = 0;
 
+    voxelByteNote.Traverse(camera);
+    // printf("%d, %d\n", minX, maxX);
     lastTime = time;
     glfwSwapBuffers(window);
   }

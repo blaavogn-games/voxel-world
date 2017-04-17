@@ -20,7 +20,7 @@ class Shader
 		Shader(const GLchar *vertexPath, const GLchar *fragmentPath);
 		~Shader();
     void Use();
-    void UpdateCamera(Camera camera);
+    void UpdateCamera(Camera *camera);
 };
 
 #endif

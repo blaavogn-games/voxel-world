@@ -47,9 +47,11 @@ static const GLfloat temp_va[] = {
 const GLfloat* VoxelRenderer::vertices = temp_va;
 GLuint VoxelRenderer::VAO = -1;
 GLuint VoxelRenderer::VBO = -1;
+Shader* VoxelRenderer::shader = nullptr;
 std::vector<GLuint> VoxelRenderer::textures = std::vector<GLuint>();
+int VoxelRenderer::c = 0;
 
-VoxelRenderer::VoxelRenderer(){
+void VoxelRenderer::StaticInit(){
   glGenVertexArrays(1, &VAO);
   glGenBuffers(1, &VBO);
 
@@ -71,23 +73,18 @@ VoxelRenderer::VoxelRenderer(){
 
   shader = ShaderManager::GetShader("v-shader/3d.vert","f-shader/circle.frag");
   shader->Use();
-}
 
-VoxelRenderer::~VoxelRenderer(){
-  glDeleteVertexArrays(1, &VAO);
-  glDeleteBuffers(1, &VBO);
+  glActiveTexture(GL_TEXTURE0);
+  glBindVertexArray(VAO);
 }
 
 void VoxelRenderer::Draw(float time, int x, int y, int z, char type){
   if(type==0)
     return;
 
+  c++;
   glBindTexture(GL_TEXTURE_2D, textures[type]);
-
-  glActiveTexture(GL_TEXTURE0);
-  glBindVertexArray(VAO);
   glUniform3f(shader->transformLocation, x, y, z);
-  glUniform1f(shader->noiseLocation, (float) (rand() % 100));
+  glUniform1f(shader->noiseLocation, ((float)(rand() % 100)) / 1000.0f);
   glDrawArrays(GL_TRIANGLES, 0, 36);
-  glBindVertexArray(0);
 }

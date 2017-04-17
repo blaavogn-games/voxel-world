@@ -97,9 +97,9 @@ void Shader::Use()
   glUseProgram(this->Program);
 }
 
-void Shader::UpdateCamera(Camera camera)
+void Shader::UpdateCamera(Camera *camera)
 {
-  glUniformMatrix4fv(viewLocation, 1, GL_FALSE, glm::value_ptr(camera.GetView()));
-  glUniformMatrix4fv(projectionLocation, 1, GL_FALSE, glm::value_ptr(camera.projection));
-  glUniform3f(viewPositionLocation, camera.position.x, camera.position.y, camera.position.z);
+  glUniformMatrix4fv(viewLocation, 1, GL_FALSE, glm::value_ptr(camera->GetView()));
+  glUniformMatrix4fv(projectionLocation, 1, GL_FALSE, glm::value_ptr(camera->projection));
+  glUniform3f(viewPositionLocation, camera->position.x, camera->position.y, camera->position.z);
 }
