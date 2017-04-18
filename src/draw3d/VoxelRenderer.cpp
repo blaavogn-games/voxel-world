@@ -81,10 +81,9 @@ void VoxelRenderer::StaticInit(){
 void VoxelRenderer::Draw(float time, int x, int y, int z, char type){
   if(type==0)
     return;
-
   c++;
   glBindTexture(GL_TEXTURE_2D, textures[type]);
   glUniform3f(shader->transformLocation, x, y, z);
-  glUniform1f(shader->noiseLocation, ((float)(rand() % 100)) / 1000.0f);
+  glUniform1f(shader->noiseLocation, ((float)(rand() % 100)) / 6000.0f);
   glDrawArrays(GL_TRIANGLES, 0, 36);
 }

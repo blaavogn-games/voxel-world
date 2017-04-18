@@ -15,6 +15,7 @@
 #include "src/Timer.h"
 #include "src/shader/Shader.h"
 #include "src/draw3d/VoxelRenderer.h"
+#include "src/io/Input.h"
 #include "src/Window.h"
 #include "src/world/VoxelByteNote.h"
 
@@ -24,7 +25,6 @@ Timer timer;
 Camera camera;
 VoxelByteNote voxelByteNote(0,0,0);
 
-void keyCallback(GLFWwindow* window, int key, int scancode, int action, int mode);
 void cursorCallback(GLFWwindow* window, double xPos, double yPos);
 void mouseClickCallback(GLFWwindow* window, int button, int action, int mode);
 void DrawCircle(float cx, float cy, float r, int num_segments);
@@ -32,7 +32,7 @@ void DrawCircle(float cx, float cy, float r, int num_segments);
 using namespace glm;
 
 int main() {
-  GLFWwindow* window = Window::Init(WIDTH, HEIGHT, &keyCallback, &mouseClickCallback, &cursorCallback);
+  GLFWwindow* window = Window::Init(WIDTH, HEIGHT, &Input::KeyCallback, &mouseClickCallback, &cursorCallback);
   if (!window){
     printf("Something went wrong with window initialization\n");
     exit(-1);
@@ -40,9 +40,8 @@ int main() {
 
   VoxelRenderer::StaticInit();
 
-  camera.Translate(glm::vec3(-16.0f,10.0f,-16.0f));
+  camera.Translate(glm::vec3(-16.0f,0.0f,-16.0f));
   camera.LookHorizontal(45);
-  camera.Print();
 
   float lastTime = timer.GetMs();
   while (!glfwWindowShouldClose(window))
@@ -53,17 +52,16 @@ int main() {
     if (timer.IsPaused())
       continue;
 
+    Input::Reset();
     ShaderManager::SetCamera(&camera);
-
     glClearColor(0.8f,0.8f,1.0f,1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     //Render
     printf("FPS: %f, voxels: %d\n", 1000.0f/(time-lastTime), VoxelRenderer::c);
     VoxelRenderer::c = 0;
-
+    camera.Update();
     voxelByteNote.Traverse(camera);
-    // printf("%d, %d\n", minX, maxX);
     lastTime = time;
     glfwSwapBuffers(window);
   }
@@ -91,33 +89,3 @@ void mouseClickCallback(GLFWwindow* window, int button, int action, int mode)
   // curParticle = (curParticle + 1) % particleNum;
 }
 
-void keyCallback(GLFWwindow* window, int key, int scancode, int action, int mode)
-{
-  if(key == GLFW_KEY_W)
-    camera.Translate(camera.front * 0.1f);
-  if(key == GLFW_KEY_S)
-    camera.Translate(camera.front * -0.1f);
-  if(key == GLFW_KEY_D)
-    camera.Translate(glm::normalize(glm::cross(camera.up,camera.front)) * -0.1f);
-  if(key == GLFW_KEY_A)
-    camera.Translate(glm::normalize(glm::cross(camera.up,camera.front)) * 0.1f);
-  if(key == GLFW_KEY_UP)
-    camera.LookVertical(1);
-  if(key == GLFW_KEY_DOWN)
-    camera.LookVertical(-1);
-  if(key == GLFW_KEY_RIGHT)
-    camera.LookHorizontal(1);
-  if(key == GLFW_KEY_LEFT)
-    camera.LookHorizontal(-1);
-  if(key == GLFW_KEY_Q && action == GLFW_PRESS){
-    if(timer.IsPaused()){
-      timer.Resume();
-    }
-    else{
-      timer.Pause();
-    }
-  }
-
-  if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
-    glfwSetWindowShouldClose(window, GL_TRUE);
-}

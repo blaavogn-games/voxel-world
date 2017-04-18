@@ -35,32 +35,77 @@ void Camera::LookAt(glm::vec3 target){
   front = glm::normalize(target - position);
 }
 
+// Extracting frstum planes
+// http://gamedevs.org/uploads/fast-extraction-viewing-frustum-planes-from-world-view-projection-matrix.pdf
 glm::mat4 Camera::GetView(){
   glm::mat4 view = glm::lookAt(position, position + front, up);
   glm::mat4 cull = projection * view;
-  row1 = glm::vec4(cull[0][0],cull[1][0],cull[2][0],cull[3][0]);
-  row2 = glm::vec4(cull[0][1],cull[1][1],cull[2][1],cull[3][1]);
-  row3 = glm::vec4(cull[0][2],cull[1][2],cull[2][2],cull[3][2]);
-  row4 = glm::vec4(cull[0][3],cull[1][3],cull[2][3],cull[3][3]);
+  planes[0].x = cull[0][3] + cull[0][0]; //left
+  planes[0].y = cull[1][3] + cull[1][0];
+  planes[0].z = cull[2][3] + cull[2][0];
+  planes[0].w = cull[3][3] + cull[3][0];
+  planes[1].x = cull[0][3] - cull[0][0]; //right
+  planes[1].y = cull[1][3] - cull[1][0];
+  planes[1].z = cull[2][3] - cull[2][0];
+  planes[1].w = cull[3][3] - cull[3][0];
+  planes[2].x = cull[0][3] + cull[0][1]; //bottom
+  planes[2].y = cull[1][3] + cull[1][1];
+  planes[2].z = cull[2][3] + cull[2][1];
+  planes[2].w = cull[3][3] + cull[3][1];
+  planes[3].x = cull[0][3] - cull[0][1]; //top
+  planes[3].y = cull[1][3] - cull[1][1];
+  planes[3].z = cull[2][3] - cull[2][1];
+  planes[3].w = cull[3][3] - cull[3][1];
+  planes[4].x = cull[0][3] + cull[0][2]; //near
+  planes[4].y = cull[1][3] + cull[1][2];
+  planes[4].z = cull[2][3] + cull[2][2];
+  planes[4].w = cull[3][3] + cull[3][2];
+  planes[5].x = cull[0][3] - cull[0][2]; //far
+  planes[5].y = cull[1][3] - cull[1][2];
+  planes[5].z = cull[2][3] - cull[2][2];
+  planes[5].w = cull[3][3] - cull[3][2];
   return view;
 }
 
+// Partly usin https://doc.lagout.org/Others/Game%20Development/Programming/Graphics%20Gems%204.pdf
+// page 84
 bool Camera::WithinFrustum(glm::vec3 p1, glm::vec3 p2){
-  return WithinFrustum(p1) || WithinFrustum(p2);
+  glm::vec3 max;
+  for (int i = 0; i < 6; i++)
+  {
+    glm::vec4 plane = planes[i];
+    max.x = (plane.x >= 0) ? p2.x : p1.x;
+    max.y = (plane.y >= 0) ? p2.y : p1.y;
+    max.z = (plane.z >= 0) ? p2.z : p1.z;
+    if(plane.x * max.x + plane.y * max.y + plane.z * max.z + plane.w < 0)
+      return false;
+  }
+  return true;
 }
 
-bool Camera::WithinFrustum(glm::vec3 point){
-  glm::vec4 vertex = glm::vec4(point, 1.0f);
-
-  return (glm::dot(vertex, (row4 + row1)) > 0) &&
-         (glm::dot(vertex, (row4 - row1)) > 0) &&
-         (glm::dot(vertex, (row4 + row2)) > 0) &&
-         (glm::dot(vertex, (row4 - row2)) > 0) &&
-         (glm::dot(vertex, (row4 + row3)) > 0) &&
-         (glm::dot(vertex, (row4 - row3)) > 0);
-}
-
-void Camera::Print(){
-  printf("(%.1f, %.1f, %.1f)\n", front.x, front.y, front.z);
-  printf("(%.1f, %.1f, %.1f)\n", position.x, position.y, position.z);
+void Camera::Update(){
+  if(Input::Key[GLFW_KEY_W])
+    Translate(front * 0.5f);
+  if(Input::Key[GLFW_KEY_S])
+    Translate(front * -0.5f);
+  if(Input::Key[GLFW_KEY_D])
+    Translate(glm::normalize(glm::cross(up,front)) * -0.5f);
+  if(Input::Key[GLFW_KEY_A])
+    Translate(glm::normalize(glm::cross(up,front)) * 0.5f);
+  if(Input::Key[GLFW_KEY_UP])
+    LookVertical(3);
+  if(Input::Key[GLFW_KEY_DOWN])
+    LookVertical(-3);
+  if(Input::Key[GLFW_KEY_RIGHT])
+    LookHorizontal(3);
+  if(Input::Key[GLFW_KEY_LEFT])
+    LookHorizontal(-3);
+  if(Input::KeyDown[GLFW_KEY_Q]){
+    // if(timer.IsPaused()){
+    //   timer.Resume();
+    // }
+    // else{
+    //   timer.Pause();
+    // }
+  }
 }
