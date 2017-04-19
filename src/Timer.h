@@ -2,17 +2,20 @@
 #define TIMER_H
 
 #include <stdio.h>
+#include <chrono>
 
 class Timer
 {
 	private:
-		bool isPaused = false;
-		float pauseTime = 0, lastPause = 0, timeAdjust;
-	public:
-		float GetMs();
-		void Pause();
-		void Resume();
-		bool IsPaused();
+		static bool isPaused;
+    static float pauseTime, lastPause, timeAdjust;
+    static float GetMs();
+  public:
+		static float Time, DeltaTime;
+		static void Tick();
+		static void Pause();
+		static void Resume();
+		static bool IsPaused();
 };
-  
+
 #endif

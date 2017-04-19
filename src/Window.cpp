@@ -50,11 +50,16 @@ GLFWwindow* Window::Init(GLuint WIDTH,
   // glEnable(GL_POINT_SPRITE);
   // glEnable(GL_VERTEX_PROGRAM_POINT_SIZE);
 
-  glEnable(GL_CULL_FACE);
-  glCullFace(GL_BACK);
+  // glEnable(GL_CULL_FACE);
+  // glCullFace(GL_BACK);
 
   // glEnable(GL_BLEND);
   // glBlendFunc(GL_SRC_ALPHA, GL_ONE);
+
+  const unsigned char * version ;
+  version = (const unsigned char *)glGetString(GL_VENDOR);
+  printf ("Vendor: %s\n", version);
+
 
   return window;
 }

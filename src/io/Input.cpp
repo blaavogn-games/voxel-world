@@ -12,12 +12,12 @@ void Input::Reset(){
 }
 
 void Input::KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mode){
-  if(action == GLFW_PRESS)
+  if (action == GLFW_PRESS)
   {
     Key[key] = true;
     KeyDown[key] = true;
   }
-  else if(action == GLFW_RELEASE)
+  else if (action == GLFW_RELEASE)
   {
     Key[key] = false;
     KeyUp[key] = true;

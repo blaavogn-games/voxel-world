@@ -12,7 +12,8 @@ class VoxelRenderer
   private:
     static Shader *shader;
     static const GLfloat *vertices;
-    static GLuint VAO, VBO;
+    static const GLuint *indices;
+    static GLuint VAO, VBO, EBO;
     static std::vector<GLuint> textures;
   public:
     static int c;

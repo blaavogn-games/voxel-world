@@ -85,21 +85,21 @@ bool Camera::WithinFrustum(glm::vec3 p1, glm::vec3 p2){
 
 void Camera::Update(){
   if(Input::Key[GLFW_KEY_W])
-    Translate(front * 0.5f);
+    Translate(front * 10.0f * Timer::DeltaTime);
   if(Input::Key[GLFW_KEY_S])
-    Translate(front * -0.5f);
+    Translate(front * -10.0f * Timer::DeltaTime);
   if(Input::Key[GLFW_KEY_D])
-    Translate(glm::normalize(glm::cross(up,front)) * -0.5f);
+    Translate(glm::normalize(glm::cross(up,front)) * -10.0f * Timer::DeltaTime);
   if(Input::Key[GLFW_KEY_A])
-    Translate(glm::normalize(glm::cross(up,front)) * 0.5f);
+    Translate(glm::normalize(glm::cross(up,front)) * 10.0f * Timer::DeltaTime);
   if(Input::Key[GLFW_KEY_UP])
-    LookVertical(3);
+    LookVertical(30 * Timer::DeltaTime);
   if(Input::Key[GLFW_KEY_DOWN])
-    LookVertical(-3);
+    LookVertical(-30 * Timer::DeltaTime);
   if(Input::Key[GLFW_KEY_RIGHT])
-    LookHorizontal(3);
+    LookHorizontal(30 * Timer::DeltaTime);
   if(Input::Key[GLFW_KEY_LEFT])
-    LookHorizontal(-3);
+    LookHorizontal(-30 * Timer::DeltaTime);
   if(Input::KeyDown[GLFW_KEY_Q]){
     // if(timer.IsPaused()){
     //   timer.Resume();

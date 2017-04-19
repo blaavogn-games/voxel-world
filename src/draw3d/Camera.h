@@ -8,6 +8,7 @@
 #include <GLFW/glfw3.h>
 
 #include "../io/Input.h"
+#include "../Timer.h"
 #include "../geom/Transform.h"
 
 class Camera
