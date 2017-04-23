@@ -27,8 +27,9 @@ void main()
   vec3 ambient = ambientStrength * lightColor;
 
   vec4 tmpColor = texture(inTexture, TexCoord);
-  float fog = LinearizeDepth(gl_FragCoord.z) / far;
+  // float fog = LinearizeDepth(gl_FragCoord.z) / far;
   // color = vec4(vec3(fog * fog),1.0f);
 
-  color = vec4((ambient + Diffuse), 1.0f) * tmpColor + (noise * 1 + fog) * vec4(0.3f,0.5f,0.5,1.0);
+  color = vec4((ambient + Diffuse), 1.0f) * tmpColor;
+  // color = vec4((ambient + Diffuse), 1.0f) * tmpColor + (noise * 1 + fog) * vec4(0.3f,0.5f,0.5,1.0);
 }

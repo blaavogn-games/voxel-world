@@ -20,9 +20,9 @@
 #include "src/world/VoxelByteNote.h"
 
 // const GLuint WIDTH = 1366, HEIGHT = 768;
-const GLuint WIDTH = 800, HEIGHT = 800;
+const GLuint WIDTH = 600, HEIGHT = 600;
 Camera camera;
-VoxelByteNote voxelByteNote(0,0,0);
+VoxelByteNote* VoxelByteNote::Root = new VoxelByteNote(0,0,0);
 
 void cursorCallback(GLFWwindow* window, double xPos, double yPos);
 void mouseClickCallback(GLFWwindow* window, int button, int action, int mode);
@@ -37,9 +37,13 @@ int main() {
     exit(-1);
   }
 
+  for(int i = 0; i < 1024; i++){
+    Input::Key[i] = false;
+    Input::KeyUp[i] = false;
+    Input::KeyDown[i] = false;
+  }
   VoxelRenderer::StaticInit();
-
-  camera.Translate(glm::vec3(-16.0f,0.0f,-16.0f));
+  camera.Translate(glm::vec3(-16.0f,128.0f,-16.0f));
   camera.LookHorizontal(45);
 
   while (!glfwWindowShouldClose(window))
@@ -59,7 +63,7 @@ int main() {
     printf("FPS: %f, voxels: %d\n", 1.0f/Timer::DeltaTime, VoxelRenderer::c);
     VoxelRenderer::c = 0;
     camera.Update();
-    voxelByteNote.Traverse(camera);
+    VoxelByteNote::Root->Traverse(camera);
     glfwSwapBuffers(window);
   }
   glfwTerminate();

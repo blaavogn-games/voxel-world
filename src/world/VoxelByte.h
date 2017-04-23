@@ -10,7 +10,9 @@ class VoxelByte
   protected:
     int x, y, z;
   public:
+    virtual void CalculateVisibleVoxels() = 0;
     virtual void Traverse(Camera camera) = 0;
+    virtual char At(int x, int y, int z) = 0;
 };
 
 #endif
