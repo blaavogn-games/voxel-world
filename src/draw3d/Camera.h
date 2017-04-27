@@ -7,7 +7,6 @@
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 
-#include "../io/Input.h"
 #include "../Timer.h"
 #include "../geom/Transform.h"
 
@@ -16,6 +15,7 @@ class Camera
   private:
     float pitch, yaw;
     void ComputeDirFromPY();
+    float velosity;
   public:
     glm::vec3 front;
     glm::vec3 up;
@@ -30,7 +30,6 @@ class Camera
     void LookHorizontal(float delta);
     void LookAt(glm::vec3 target);
     bool WithinFrustum(glm::vec3 p1, glm::vec3 p2);
-    void Update();
 };
 
 #endif

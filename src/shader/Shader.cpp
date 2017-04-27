@@ -81,11 +81,11 @@ Shader::Shader(const char *vertexPath, const char *fragmentPath)
   // Delete the shaders as they're linked into our program now and no longer necessery
   glDeleteShader(vertex);
   glDeleteShader(fragment);
-  transformLocation     = glGetUniformLocation(Program, "worldCoord");
-  viewLocation          = glGetUniformLocation(Program, "view");
-  projectionLocation    = glGetUniformLocation(Program, "projection");
-  viewPositionLocation  = glGetUniformLocation(Program, "viewPosition");
-  noiseLocation         = glGetUniformLocation(Program, "noise");
+  UniWorldCoord    = glGetUniformLocation(Program, "worldCoord");
+  UniView          = glGetUniformLocation(Program, "view");
+  UniProjection    = glGetUniformLocation(Program, "projection");
+  UniViewPosition  = glGetUniformLocation(Program, "viewPosition");
+  UniLightPosition = glGetUniformLocation(Program, "lightPosition");
 }
 
 Shader::~Shader(){
@@ -94,12 +94,14 @@ Shader::~Shader(){
 
 void Shader::Use()
 {
-  glUseProgram(this->Program);
+  glUseProgram(Program);
 }
 
-void Shader::UpdateCamera(Camera *camera)
+void Shader::UpdateCamera(Camera *camera, glm::vec3 *lightPosition)
 {
-  glUniformMatrix4fv(viewLocation, 1, GL_FALSE, glm::value_ptr(camera->GetView()));
-  glUniformMatrix4fv(projectionLocation, 1, GL_FALSE, glm::value_ptr(camera->projection));
-  glUniform3f(viewPositionLocation, camera->position.x, camera->position.y, camera->position.z);
+  Use();
+  glUniformMatrix4fv(UniView, 1, GL_FALSE, glm::value_ptr(camera->GetView()));
+  glUniformMatrix4fv(UniProjection, 1, GL_FALSE, glm::value_ptr(camera->projection));
+  glUniform3f(UniViewPosition, camera->position.x, camera->position.y, camera->position.z);
+  glUniform3f(UniLightPosition, lightPosition->x, lightPosition->y, lightPosition->z);
 }

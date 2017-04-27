@@ -14,7 +14,7 @@ class ShaderManager
     static ShaderMap map;
   public:
     static Shader* GetShader(const char *vertexPath, const char *fragmentPath);
-    static void SetCamera(Camera *camera);
+    static void SetCamera(Camera *camera, glm::vec3 *lightPosition);
 };
 
 #endif

@@ -67,25 +67,18 @@ void VoxelRenderer::StaticInit(){
 
   glBindVertexArray(0);
 
-  textures.push_back(ResourceManager::GetTexture("res/grass.png"));
-  textures.push_back(ResourceManager::GetTexture("res/grass.png"));
-  textures.push_back(ResourceManager::GetTexture("res/water.png"));
+  textures.push_back(ResourceManager::GetTexture("res/sun.png"));
 
-  shader = ShaderManager::GetShader("v-shader/3d.vert","f-shader/circle.frag");
-  shader->Use();
-
-  glActiveTexture(GL_TEXTURE0);
   glBindVertexArray(VAO);
   glBindTexture(GL_TEXTURE_2D, textures[1]);
+  shader = ShaderManager::GetShader("v-shader/3d.vert","f-shader/unlit.frag");
 }
 
-void VoxelRenderer::Draw(float time, int x, int y, int z, char type){
-  if(type==0)
-    return;
+void VoxelRenderer::Draw(float x, float y, float z, char type){
   c++;
-  // glBindTexture(GL_TEXTURE_2D, textures[type]);
-  // glUniform3f(shader->transformLocation, x, y, z);
-  // glUniform1f(shader->noiseLocation, ((float)(rand() % 100)) / 6000.0f);
-  // glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, 0);
-  // glDrawArrays(GL_TRIANGLES, 0, 18);
+  shader->Use();
+  glBindVertexArray(VAO);
+  glBindTexture(GL_TEXTURE_2D, textures[0]);
+  glUniform3f(shader->UniWorldCoord, x, y, z);
+  glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, 0);
 }

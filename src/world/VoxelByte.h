@@ -2,7 +2,6 @@
 #define VOXELBYTE_H
 
 #include <stdio.h>
-#include "../draw3d/VoxelRenderer.h"
 #include "../draw3d/Camera.h"
 
 class VoxelByte
@@ -11,7 +10,7 @@ class VoxelByte
     int x, y, z;
   public:
     virtual void CalculateVisibleVoxels() = 0;
-    virtual void Traverse(Camera camera) = 0;
+    virtual void Traverse(Camera camera, bool trans) = 0;
     virtual char At(int x, int y, int z) = 0;
 };
 

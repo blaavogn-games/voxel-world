@@ -7,12 +7,12 @@ uniform vec3 worldCoord;
 uniform mat4 view;
 uniform mat4 projection;
 uniform vec3 viewPosition;
+uniform vec3 lightPosition;
 
 out vec3 FragPos;
-out vec2 TexCoord;
 out float Diffuse;
+out vec2 TexCoord;
 
-vec3 lightPosition = vec3(10,-10,10);
 
 void main()
 {

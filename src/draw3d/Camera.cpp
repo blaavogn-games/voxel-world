@@ -2,10 +2,11 @@
 
 Camera::Camera() {
   // projection = glm::perspective(1.1f, 1366.0f/768.0f, 1.0f, 120.0f);
-  projection = glm::perspective(1.1f, 1.0f, 1.0f, 300.0f);
-  position = glm::vec3(0,0,0);
+  projection = glm::perspective(1.3f, 1.0f, 0.2f, 120.0f);
+  position = glm::vec3(0,2,0);
   front = glm::vec3(0,0,-1);
   up = glm::vec3(0,1,0);
+  velosity = 0;
 }
 
 Camera::~Camera() { }
@@ -38,7 +39,9 @@ void Camera::LookAt(glm::vec3 target){
 // Extracting frstum planes
 // http://gamedevs.org/uploads/fast-extraction-viewing-frustum-planes-from-world-view-projection-matrix.pdf
 glm::mat4 Camera::GetView(){
-  glm::mat4 view = glm::lookAt(position, position + front, up);
+  glm::vec3 target = position + front;
+  //Posibly check whether target and position are aligned on two axis
+  glm::mat4 view = glm::lookAt(position, target, up);
   glm::mat4 cull = projection * view;
   planes[0].x = cull[0][3] + cull[0][0]; //left
   planes[0].y = cull[1][3] + cull[1][0];
@@ -83,29 +86,3 @@ bool Camera::WithinFrustum(glm::vec3 p1, glm::vec3 p2){
   return true;
 }
 
-void Camera::Update(){
-  if(Input::Key[GLFW_KEY_W])
-    Translate(front * 10.0f * Timer::DeltaTime);
-  if(Input::Key[GLFW_KEY_S])
-    Translate(front * -10.0f * Timer::DeltaTime);
-  if(Input::Key[GLFW_KEY_D])
-    Translate(glm::normalize(glm::cross(up,front)) * -10.0f * Timer::DeltaTime);
-  if(Input::Key[GLFW_KEY_A])
-    Translate(glm::normalize(glm::cross(up,front)) * 10.0f * Timer::DeltaTime);
-  if(Input::Key[GLFW_KEY_UP])
-    LookVertical(30 * Timer::DeltaTime);
-  if(Input::Key[GLFW_KEY_DOWN])
-    LookVertical(-30 * Timer::DeltaTime);
-  if(Input::Key[GLFW_KEY_RIGHT])
-    LookHorizontal(30 * Timer::DeltaTime);
-  if(Input::Key[GLFW_KEY_LEFT])
-    LookHorizontal(-30 * Timer::DeltaTime);
-  if(Input::KeyDown[GLFW_KEY_Q]){
-    // if(timer.IsPaused()){
-    //   timer.Resume();
-    // }
-    // else{
-    //   timer.Pause();
-    // }
-  }
-}

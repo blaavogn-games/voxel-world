@@ -19,7 +19,7 @@ class VoxelRenderer
     static int c;
     VoxelRenderer();
     ~VoxelRenderer();
-    static void Draw(float time, int x, int y, int z, char type);
+    static void Draw(float x, float y, float z, char type);
     static void StaticInit();
 };
 

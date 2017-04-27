@@ -15,8 +15,8 @@ Shader* ShaderManager::GetShader(const char *vertexPath, const char *fragmentPat
   return (el->second);
 }
 
-void ShaderManager::SetCamera(Camera *camera){
+void ShaderManager::SetCamera(Camera *camera, glm::vec3 *lightPosition){
   for (auto it = map.begin(); it != map.end(); ++it){
-    it->second->UpdateCamera(camera);
+    it->second->UpdateCamera(camera, lightPosition);
   }
 }

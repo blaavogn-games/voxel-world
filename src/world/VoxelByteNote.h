@@ -15,8 +15,9 @@ class VoxelByteNote : public VoxelByte
     static VoxelByteNote *Root;
     VoxelByteNote(int x, int y, int z);
     void CalculateVisibleVoxels(){};
-    void Traverse(Camera camera);
+    void Traverse(Camera camera, bool trans);
     char At(int x, int y, int z);
+    char At(glm::vec3 &pos);
 };
 
 #endif

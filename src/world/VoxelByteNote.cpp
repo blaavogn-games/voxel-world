@@ -10,7 +10,7 @@ VoxelByteNote::VoxelByteNote(int x, int y, int z) {
         voxelBytes[xi][yi][zi] = nullptr;
 }
 
-void VoxelByteNote::Traverse(Camera camera){
+void VoxelByteNote::Traverse(Camera camera, bool trans){
   for (int xi = 0; xi < 32; ++xi){
     for (int yi = 0; yi < 32; ++yi){
       for (int zi = 0; zi < 32; ++zi){
@@ -29,7 +29,7 @@ void VoxelByteNote::Traverse(Camera camera){
             if(zi > 0  && voxelBytes[xi][yi][zi-1]!=nullptr)voxelBytes[xi][yi][zi-1]->CalculateVisibleVoxels();
             if(zi < 31 && voxelBytes[xi][yi][zi+1]!=nullptr)voxelBytes[xi][yi][zi+1]->CalculateVisibleVoxels();
           }
-          vb->Traverse(camera);
+          vb->Traverse(camera, trans);
         }
       }
     }
@@ -45,4 +45,8 @@ char VoxelByteNote::At(int xi, int yi, int zi){
     return 1;
   }
   return voxelByte->At(xi,yi,zi);
+}
+
+char VoxelByteNote::At(glm::vec3 &pos){
+  return At((int) (pos.x + 0.5), (int) (pos.y + 0.5), (int) (pos.z + 0.5));
 }

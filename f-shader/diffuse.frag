@@ -10,7 +10,7 @@ in float Diffuse;
 out vec4 color;
 
 float near = 1;
-float far = 120;
+float far = 160;
 
 vec3 lightColor = vec3(1.0f, 1.0f, 1.0f);
 
@@ -23,13 +23,12 @@ float LinearizeDepth(float depth)
 void main()
 {
   //Abient Light
-  float ambientStrength = 0.3f;
+  float ambientStrength = 0.5f;
   vec3 ambient = ambientStrength * lightColor;
 
   vec4 tmpColor = texture(inTexture, TexCoord);
-  // float fog = LinearizeDepth(gl_FragCoord.z) / far;
-  // color = vec4(vec3(fog * fog),1.0f);
+  float fog = LinearizeDepth(gl_FragCoord.z) / far;
 
-  color = vec4((ambient + Diffuse), 1.0f) * tmpColor;
-  // color = vec4((ambient + Diffuse), 1.0f) * tmpColor + (noise * 1 + fog) * vec4(0.3f,0.5f,0.5,1.0);
+  vec4 tex4 = vec4((ambient + Diffuse), 1.0f) * tmpColor;
+  color = tex4 + (fog * fog* fog) * vec4(0.3f,0.5f,0.5,1.0);
 }

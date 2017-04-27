@@ -14,13 +14,16 @@ class Shader
 {
   private:
   public:
-	  GLuint transformLocation, viewLocation, viewPositionLocation, projectionLocation;
-    GLuint noiseLocation;
+	  GLuint UniWorldCoord;
+    GLuint UniView;
+    GLuint UniProjection;
+    GLuint UniViewPosition;
+    GLuint UniLightPosition;
   	GLuint Program;
 		Shader(const GLchar *vertexPath, const GLchar *fragmentPath);
 		~Shader();
     void Use();
-    void UpdateCamera(Camera *camera);
+    void UpdateCamera(Camera *camera, glm::vec3 *lightPosition);
 };
 
 #endif
