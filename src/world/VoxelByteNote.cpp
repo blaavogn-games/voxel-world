@@ -39,14 +39,25 @@ void VoxelByteNote::Traverse(Camera camera, bool trans){
 char VoxelByteNote::At(int xi, int yi, int zi){
   if(xi < 0 || yi < 0 || zi < 0)
     return 0;
-
   auto voxelByte = voxelBytes[(xi - x) / 32][(yi - y) / 32][(zi - z) / 32];
-  if(voxelByte == nullptr){
+  if(voxelByte == nullptr)
     return 1;
-  }
   return voxelByte->At(xi,yi,zi);
 }
 
 char VoxelByteNote::At(glm::vec3 &pos){
-  return At((int) (pos.x + 0.5), (int) (pos.y + 0.5), (int) (pos.z + 0.5));
+  return At((int) (pos.x + 0.5),(int) (pos.y + 0.5),(int) (pos.z + 0.5));
+}
+
+void VoxelByteNote::Set(int xi, int yi, int zi, char v){
+  if(xi < 0 || yi < 0 || zi < 0)
+    return;
+  auto voxelByte = voxelBytes[(xi - x) / 32][(yi - y) / 32][(zi - z) / 32];
+  if(voxelByte == nullptr)
+    return; //Perhaps spawn ??
+  return voxelByte->Set(xi,yi,zi,v);
+}
+
+void VoxelByteNote::Set(glm::vec3 &pos, char v){
+  return Set((int) (pos.x + 0.5),(int) (pos.y + 0.5),(int) (pos.z + 0.5), v);
 }

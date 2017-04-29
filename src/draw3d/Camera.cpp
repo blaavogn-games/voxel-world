@@ -2,7 +2,7 @@
 
 Camera::Camera() {
   // projection = glm::perspective(1.1f, 1366.0f/768.0f, 1.0f, 120.0f);
-  projection = glm::perspective(1.3f, 1.0f, 0.2f, 120.0f);
+  projection = glm::perspective(1.1f, 1.0f, 0.1f, 120.0f);
   position = glm::vec3(0,2,0);
   front = glm::vec3(0,0,-1);
   up = glm::vec3(0,1,0);

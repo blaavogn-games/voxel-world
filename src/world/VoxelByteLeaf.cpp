@@ -114,3 +114,8 @@ void VoxelByteLeaf::Traverse(Camera camera, bool transparent){
 char VoxelByteLeaf::At(int xi, int yi, int zi){
   return voxels[xi - x][yi - y][zi - z];
 }
+
+void VoxelByteLeaf::Set(int xi, int yi, int zi, char v){
+  voxels[xi - x][yi - y][zi - z] = v;
+  CalculateVisibleVoxels();
+}

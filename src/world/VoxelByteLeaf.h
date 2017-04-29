@@ -21,6 +21,7 @@ class VoxelByteLeaf : public VoxelByte
     ~VoxelByteLeaf();
     void Traverse(Camera camera, bool trans);
     char At(int x, int y, int z);
+    void Set(int x, int y, int z, char c);
 };
 
 #endif
